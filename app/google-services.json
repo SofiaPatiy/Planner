@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "791224076803",
+    "project_id": "planner-f865b",
+    "storage_bucket": "planner-f865b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791224076803:android:f67aec3eb984f22e821c36",
+        "android_client_info": {
+          "package_name": "com.gmail.sofiapatiy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWhxyivoypYAvlR2fw9MkECozNc-M_Xc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
