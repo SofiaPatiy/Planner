@@ -2,6 +2,7 @@ package com.gmail.sofiapatiy
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -27,7 +28,9 @@ private lateinit var binding: ActivityMainBinding
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+            R.id.navigation_home, R.id.navigation_settings, R.id.navigation_about
+        )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -36,5 +39,8 @@ private lateinit var binding: ActivityMainBinding
 
         myRef.setValue("Hello, World!")
 
+
+        val currentTheme = resources.configuration.uiMode  //& Configuration.UI_MODE_NIGHT_MASK
+        AppCompatDelegate.setDefaultNightMode(currentTheme)
     }
 }
