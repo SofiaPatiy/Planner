@@ -9,7 +9,18 @@
     <string name="add_new_task">Add new task</string>
     <string name="cancel_button">Cancel</string>
     <string name="create_button">Create</string>
+    <string name="ok">OK</string>
+    <string name="warning">Warning</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="submit">Submit</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="new_task">New Task</string>
     <string name="task_name">Name of task</string>
     <string name="task_note">Add note to the task</string>
+    <string name="task_details">Task Details</string>
+    <string name="make_task_regular">Make task regular</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
 </resources>

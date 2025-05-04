@@ -11,8 +11,12 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/showDetails"
-            app:destination="@id/navigation_record_details" />
+            android:id="@+id/showNewTask"
+            app:destination="@id/navigation_new_task" />
+
+        <action
+            android:id="@+id/showTaskDetails"
+            app:destination="@id/navigation_task_details" />
     </fragment>
 
     <fragment
@@ -26,11 +30,48 @@
         tools:layout="@layout/fragment_about" />
 
     <fragment
-        android:id="@+id/navigation_record_details"
-        android:name="com.gmail.sofiapatiy.ui.record.RecordFragment"
-        tools:layout="@layout/fragment_record" />
+        android:id="@+id/navigation_new_task"
+        android:name="com.gmail.sofiapatiy.ui.home.newtask.NewTaskFragment"
+        tools:layout="@layout/fragment_new_task" />
+
+    <fragment
+        android:id="@+id/navigation_task_details"
+        android:name="com.gmail.sofiapatiy.ui.home.taskdetails.TaskDetailsFragment"
+        tools:layout="@layout/fragment_task_details">
+
+        <argument
+            android:name="plannerTaskInfo"
+            android:defaultValue="@null"
+            app:argType="com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/showConfirmationDeleteDialog"
+            app:destination="@id/confirmationDeleteDialog"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/confirmationDeleteDialog"
+        android:name="com.gmail.sofiapatiy.ui.home.taskdetails.dialog.ConfirmDeleteDialogFragment">
+
+        <argument
+            android:name="plannerTaskInfo"
+            android:defaultValue="@null"
+            app:argType="com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo"
+            app:nullable="true" />
+    </dialog>
 
     <action
-        android:id="@+id/showDetails"
-        app:destination="@id/navigation_record_details" />
+        android:id="@+id/showNewTask"
+        app:destination="@id/navigation_new_task" />
+
+    <action
+        android:id="@+id/showTaskDetails"
+        app:destination="@id/navigation_task_details" />
+
+    <action
+        android:id="@+id/showConfirmationDeleteDialog"
+        app:destination="@id/confirmationDeleteDialog"
+        app:launchSingleTop="true" />
 </navigation>

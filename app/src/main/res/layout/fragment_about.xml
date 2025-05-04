@@ -10,173 +10,149 @@
             type="com.gmail.sofiapatiy.ui.about.AboutViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.about.AboutFragment">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_name"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/actionBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="@{model.appName}"
-            android:textAlignment="center"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.012" />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:id="@+id/text_version"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/title_information" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:text="@{model.appVersion}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.112"
-            tools:text="app's version" />
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".ui.about.AboutFragment">
 
-        <ImageView
-            android:id="@+id/image_icon"
-            android:layout_width="280dp"
-            android:layout_height="224dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_dashboard_black_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.201" />
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.appName}"
+                android:textAlignment="center"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Planner" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="409dp"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.657" />
+            <TextView
+                android:id="@+id/text_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.appVersion}"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_name"
+                tools:text="app's version" />
 
-        <TextView
-            android:id="@+id/text_creator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:text="@{model.appAuthor}"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.723" />
+            <ImageView
+                android:id="@+id/image_icon"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:alpha="0.3"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_dashboard_black_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_version"
+                app:tint="?colorPrimary" />
 
-        <TextView
-            android:id="@+id/text_contact_information"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:text="@string/contact_information"
-            android:textColorLink="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.77" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_icon" />
 
-        <TextView
-            android:id="@+id/text_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:text="@{model.authorEmail}"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.801" />
+            <TextView
+                android:id="@+id/text_creator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.appAuthor}"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_created"
+                tools:text="Boooooo" />
 
-        <TextView
-            android:id="@+id/text_created"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:text="@string/created_by"
-            android:textColorLink="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.691" />
+            <TextView
+                android:id="@+id/text_contact_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/contact_information"
+                android:textColorLink="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator" />
 
-        <TextView
-            android:id="@+id/text_description"
-            android:layout_width="348dp"
-            android:layout_height="155dp"
-            android:text="@{model.appDesc}"
-            android:textAlignment="gravity"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.531" />
+            <TextView
+                android:id="@+id/text_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.authorEmail}"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_contact_information"
+                tools:text="www@www.www" />
 
-        <TextView
-            android:id="@+id/text_copyright"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{model.copyright}"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.977" />
+            <TextView
+                android:id="@+id/text_created"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/created_by"
+                android:textColorLink="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_description" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp" />
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{model.appDesc}"
+                android:textAlignment="gravity"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:text="Description" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.copyright}"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_email"
+                tools:text="2025" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

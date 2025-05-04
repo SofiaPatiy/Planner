@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo" />
+
+        <variable
+            name="homeViewModel"
+            type="com.gmail.sofiapatiy.ui.home.HomeViewModel" />
+
+        <variable
+            name="homePresenter"
+            type="com.gmail.sofiapatiy.ui.home.HomeFragment.HomePresenter" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{(e) -> homePresenter.onTaskDetails(item)}"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/urgencyIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/circle_indicator"
+                app:layout_constraintBottom_toBottomOf="@id/taskName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/taskName"
+                app:urgencyIndicator="@{item.urgency}" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{item.name}"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:layout_constraintStart_toEndOf="@id/urgencyIndicator"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Name" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.note}"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/taskName"
+                tools:text="Note" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskCreationDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.formattedCreationDateTime}"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/taskNote"
+                tools:text="ABC 11.22.3333 44:55" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

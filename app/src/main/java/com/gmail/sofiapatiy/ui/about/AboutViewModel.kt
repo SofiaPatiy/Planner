@@ -1,7 +1,7 @@
 package com.gmail.sofiapatiy.ui.about
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.BuildConfig
+import com.gmail.sofiapatiy.BuildConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep the model classes and their constructors
+-keepclassmembers class com.gmail.sofiapatiy.data.model.firebase.** {
+  *;
+}
+
+# Alternatively, be more specific to only keep the no-arg constructor
+-keepclassmembers class com.gmail.sofiapatiy.data.model.firebase.PlannerUserFirebase {
+  public <init>();
+}

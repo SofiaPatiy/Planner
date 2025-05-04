@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
-    kotlin("kapt")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -11,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.gmail.sofiapatiy"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -27,17 +29,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            enableUnitTestCoverage = false
+            enableAndroidTestCoverage = false
+        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "21"
     }
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 

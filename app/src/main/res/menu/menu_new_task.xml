@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/submitTask"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_add_task_24"
+        android:title="@string/submit"
+        app:iconTint="@color/button_image_selector"
+        app:showAsAction="ifRoom" />
+</menu>

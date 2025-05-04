@@ -10,20 +10,40 @@
             type="com.gmail.sofiapatiy.ui.settings.SettingsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        tools:context=".ui.settings.SettingsFragment">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/appThemeSwitch"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/actionBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="@={settingsViewModel.isAppUseLightTheme}"
-            android:text="Use dark theme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/title_settings" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".ui.settings.SettingsFragment">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/appThemeSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@={settingsViewModel.isAppUseDarkTheme}"
+                android:text="Use dark theme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

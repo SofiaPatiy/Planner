@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="datePickerListener" type="id" />
+    <item name="timePickerListener" type="id" />
+    <item name="destinationListener" type="id" />
+    <item name="urgencyListener" type="id" />
+
+    <declare-styleable name="DateTimeSelector">
+        <attr name="dateTimeSelectorLabel" format="string" />
+    </declare-styleable>
+</resources>

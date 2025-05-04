@@ -1,46 +1,48 @@
 package com.gmail.sofiapatiy
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gmail.sofiapatiy.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
-private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("main_activity", "viewModel $viewModel")
 
-     binding = ActivityMainBinding.inflate(layoutInflater)
-     setContentView(binding.root)
-
+        val binding = ActivityMainBinding.inflate(layoutInflater)
         val navView: BottomNavigationView = binding.navView
+        setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navigation_home, R.id.navigation_settings, R.id.navigation_about
-        )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        val onDestinationChangedListener =
+            NavController.OnDestinationChangedListener { _, destination, _ ->
+                navView.isVisible = when (destination.id) {
+                    R.id.navigation_new_task, R.id.navigation_task_details -> false
+                    else -> true
+                }
+            }
+
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
+                ?.findNavController() ?: return
+
+        // remove previously attached listener (if any), to avoid possible memory leaks
+        try {
+            navController.removeOnDestinationChangedListener(onDestinationChangedListener)
+        } catch (e: Exception) {
+            // ok, if no listener attached
+        } finally {
+            navController.addOnDestinationChangedListener(onDestinationChangedListener)
+        }
         navView.setupWithNavController(navController)
-
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-
-        myRef.setValue("Hello, World!")
-
-
-        val currentTheme = resources.configuration.uiMode  //& Configuration.UI_MODE_NIGHT_MASK
-        AppCompatDelegate.setDefaultNightMode(currentTheme)
     }
 }

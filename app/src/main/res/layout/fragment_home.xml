@@ -14,26 +14,66 @@
             type="com.gmail.sofiapatiy.ui.home.HomeFragment.HomePresenter" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.home.HomeFragment">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_button_add_task"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/actionBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/purple_200"
-            android:contentDescription="@string/add_new_task"
-            android:onClick="@{(v) -> homePresenter.onClickFAB()}"
-            android:src="@drawable/ic_baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.918" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/app_name" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".ui.home.HomeFragment">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.1"
+                android:scaleType="fitXY"
+                android:scaleX="3"
+                android:scaleY="3"
+                android:src="@drawable/ic_baseline_calendar_month_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleGone="@{homeViewModel.tasks.size() == 0}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tasks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:firebaseTasks="@{homeViewModel.tasks}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/floating_button_add_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="32dp"
+                android:backgroundTint="@color/purple_200"
+                android:contentDescription="@string/add_new_task"
+                android:onClick="@{(v) -> homePresenter.onClickFAB()}"
+                android:text="@string/new_task"
+                android:textColor="?colorOnPrimary"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconTint="?colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

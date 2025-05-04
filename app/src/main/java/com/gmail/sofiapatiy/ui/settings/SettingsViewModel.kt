@@ -1,25 +1,19 @@
 package com.gmail.sofiapatiy.ui.settings
 
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class SettingsViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
-
-    val isAppUseLightTheme = MutableStateFlow(false)
+    val isAppUseDarkTheme = MutableStateFlow<Boolean?>(null)
 
     init {
-        isAppUseLightTheme.onEach { isUse ->
+        isAppUseDarkTheme.filterNotNull().onEach { isUse ->
             when (isUse) {
                 true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
