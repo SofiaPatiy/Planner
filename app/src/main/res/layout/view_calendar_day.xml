@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.kizitonwose.calendar.core.CalendarDay" />
+
+        <variable
+            name="model"
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarViewModel" />
+
+        <variable
+            name="calendarPresenter"
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarFragment.CalendarPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:onClick="@{(v) -> calendarPresenter.onDateSelect(item.date)}">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/exOneDayText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="16sp"
+            app:allCalendarTasks="@{model.allTasks}"
+            app:calendarDay="@{item}"
+            app:selectedCalendarDate="@{model.selectedDate}"
+            tools:text="99" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

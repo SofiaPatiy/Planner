@@ -20,6 +20,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.gmail.sofiapatiy.ui.calendar.CalendarFragment"
+        tools:layout="@layout/fragment_calendar">
+
+        <action
+            android:id="@+id/showTaskDetails"
+            app:destination="@id/navigation_task_details" />
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_settings"
         android:name="com.gmail.sofiapatiy.ui.settings.SettingsFragment"
         tools:layout="@layout/fragment_settings" />

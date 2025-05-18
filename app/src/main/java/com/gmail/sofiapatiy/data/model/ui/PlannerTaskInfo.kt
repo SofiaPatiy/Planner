@@ -23,3 +23,17 @@ data class PlannerTaskInfo(
     @IgnoredOnParcel
     val formattedCreationDateTime = timeOfCreation.toUIDateTimeFormattedString()
 }
+
+fun Iterable<PlannerTaskInfo>.getDailyUrgency() =
+    when (any { it.urgency == Urgency.High }) {
+        true -> Urgency.High
+        else ->
+            when (any { it.urgency == Urgency.Medium }) {
+                true -> Urgency.Medium
+                else ->
+                    when (any { it.urgency == Urgency.Low }) {
+                        true -> Urgency.Low
+                        else -> null
+                    }
+            }
+    }

@@ -10,6 +10,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="create_button">Create</string>
     <string name="ok">OK</string>
+    <string name="calendar">Calendar</string>
     <string name="warning">Warning</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="submit">Submit</string>

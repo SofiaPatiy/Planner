@@ -4,6 +4,7 @@
     <item name="timePickerListener" type="id" />
     <item name="destinationListener" type="id" />
     <item name="urgencyListener" type="id" />
+    <item name="monthCalendarListener" type="id" />
 
     <declare-styleable name="DateTimeSelector">
         <attr name="dateTimeSelectorLabel" format="string" />

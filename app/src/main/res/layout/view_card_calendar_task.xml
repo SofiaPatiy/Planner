@@ -10,12 +10,12 @@
             type="com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo" />
 
         <variable
-            name="homeViewModel"
-            type="com.gmail.sofiapatiy.ui.home.HomeViewModel" />
+            name="calendarViewModel"
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarViewModel" />
 
         <variable
             name="homePresenter"
-            type="com.gmail.sofiapatiy.ui.home.HomeFragment.HomePresenter" />
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarFragment.CalendarPresenter" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -24,7 +24,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{(e) -> homePresenter.onTaskDetails(item)}"
+        android:onClick="@{(e) -> homePresenter.onCalendarTaskDetails(item)}"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:contentPadding="16dp">

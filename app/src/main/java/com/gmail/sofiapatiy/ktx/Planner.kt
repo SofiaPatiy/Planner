@@ -10,6 +10,7 @@ import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -47,6 +48,9 @@ fun LocalDateTime.asMilliseconds() =
     ZonedDateTime.of(this, utcTimeZone)
         .toInstant()
         .toEpochMilli()
+
+fun LocalDate.toFormattedMonth(): String =
+    this.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()))
 
 fun String.toLocalDateTime(): LocalDateTime =
     LocalDateTime.parse(this, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.getDefault()))
