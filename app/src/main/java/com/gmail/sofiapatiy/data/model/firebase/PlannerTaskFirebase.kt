@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class PlannerTaskFirebase(
+    val userId: String,
     val name: String,
     val note: String,
     val reminder: String,
@@ -13,5 +14,5 @@ data class PlannerTaskFirebase(
     val isRegular: Boolean,
     val urgency: String,
 ) {
-    constructor() : this("", "", "", "", "", "", false, "")
+    constructor() : this("","", "", "", "", "", "", false, "")
 }

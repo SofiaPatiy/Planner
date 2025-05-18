@@ -2,10 +2,13 @@ package com.gmail.sofiapatiy.ui.about
 
 import androidx.lifecycle.ViewModel
 import com.gmail.sofiapatiy.BuildConfig
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AboutViewModel : ViewModel() {
+@HiltViewModel
+class AboutViewModel @Inject constructor() : ViewModel() {
 
     private val initialAppDesc = """
         This app is developed as part of a coursework project.

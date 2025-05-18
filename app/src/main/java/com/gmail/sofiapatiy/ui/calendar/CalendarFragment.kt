@@ -16,14 +16,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gmail.sofiapatiy.R
-import com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo
 import com.gmail.sofiapatiy.databinding.FragmentCalendarBinding
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.MonthScrollListener
 import com.kizitonwose.calendar.view.ViewContainer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.time.DayOfWeek
@@ -32,93 +33,120 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
+@AndroidEntryPoint
 class CalendarFragment : Fragment() {
 
     private val viewModel: CalendarViewModel by viewModels()
     private val viewPresenter by lazy { CalendarPresenter() }
+
+    private var _binding: FragmentCalendarBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentCalendarBinding.inflate(layoutInflater).apply {
+        _binding = this
         lifecycleOwner = viewLifecycleOwner
         calendarViewModel = viewModel
         calendarPresenter = viewPresenter
+    }.root
 
-        // avoid top application toolbar being overlapped by system toolbar on modern OSes
-        ViewCompat.setOnApplyWindowInsetsListener(actionBar) { appbar, insets ->
-            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            if (statusBarHeight != 0)
-                appbar.updatePadding(top = statusBarHeight)
-            WindowInsetsCompat.CONSUMED
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            // avoid top application toolbar being overlapped by system toolbar on modern OSes
+            ViewCompat.setOnApplyWindowInsetsListener(actionBar) { appbar, insets ->
+                val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+                if (statusBarHeight != 0)
+                    appbar.updatePadding(top = statusBarHeight)
+                WindowInsetsCompat.CONSUMED
+            }
 
-        with(calendarView) {
-            val currentMonth = YearMonth.now()
-            val startCalendarMonth = currentMonth.minusYears(1)
-            val endCalendarMonth = currentMonth.plusYears(1)
-            val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)
+            with(calendarView) {
+                val currentMonth = YearMonth.now()
+                val startCalendarMonth = currentMonth.minusYears(1)
+                val endCalendarMonth = currentMonth.plusYears(1)
+                val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)
 
-            // each calendar day cell
-            dayBinder = CalendarAdapter(
-                viewLifecycleOwner,
-                viewModel,
-                viewPresenter
-            )
+                // each calendar day cell
+                dayBinder = CalendarAdapter(
+                    viewLifecycleOwner,
+                    viewModel,
+                    viewPresenter
+                )
 
-            // top header with weekDays
-            monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-                override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
-                    if (container.titlesContainer.tag == null) {
-                        container.titlesContainer.tag = data.yearMonth
+                // top header with weekDays
+                monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+                    override fun create(view: View) = MonthViewContainer(view)
+                    override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                        if (container.titlesContainer.tag == null) {
+                            container.titlesContainer.tag = data.yearMonth
 
-                        container.titlesContainer.children.map { it as TextView }
-                            .forEachIndexed { index, textView ->
-                                val dayOfWeek = daysOfWeek[index]
-                                val title =
-                                    dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-                                textView.text = title
-                            }
+                            container.titlesContainer.children.map { it as TextView }
+                                .forEachIndexed { index, textView ->
+                                    val dayOfWeek = daysOfWeek[index]
+                                    val title =
+                                        dayOfWeek.getDisplayName(
+                                            TextStyle.SHORT,
+                                            Locale.getDefault()
+                                        )
+                                    textView.text = title
+                                }
+                        }
                     }
                 }
-            }
 
-            // avoid memory leaks on heavy CalendarView's scrollListener
-            val newListener = object : MonthScrollListener {
-                override fun invoke(p1: CalendarMonth) {
-                    viewModel.setMonthStartDate(p1.yearMonth.atStartOfMonth())
+                // avoid memory leaks on heavy CalendarView's scrollListener
+                val newListener = object : MonthScrollListener {
+                    override fun invoke(p1: CalendarMonth) {
+
+                        val firstDateOfMonth = p1.yearMonth.atStartOfMonth()
+                        val selectedDate = viewModel.selectedDate.value
+                        val dateToSelect = when (p1.yearMonth) {
+                            selectedDate.yearMonth -> selectedDate
+                            LocalDate.now().yearMonth -> LocalDate.now()
+                            else -> firstDateOfMonth
+                        }
+
+                        viewModel.setCalendarSelectedDate(dateToSelect)
+                        viewModel.setMonthStartDate(firstDateOfMonth)
+                    }
                 }
-            }
-            val oldListener =
-                ListenerUtil.trackListener(this, newListener, R.id.monthCalendarListener)
+                val oldListener =
+                    ListenerUtil.trackListener(this, newListener, R.id.monthCalendarListener)
 
-            if (oldListener != null) {
-                monthScrollListener = null
-            }
-            monthScrollListener = newListener
+                if (oldListener != null) {
+                    monthScrollListener = null
+                }
+                monthScrollListener = newListener
 
-            // run calendar and set to current date
-            setup(startCalendarMonth, endCalendarMonth, daysOfWeek.first())
-            scrollToDate(LocalDate.now())
+                // run calendar and set to current date
+                setup(startCalendarMonth, endCalendarMonth, daysOfWeek.first())
+                scrollToDate(LocalDate.now())
+            }
+
+            dayAgendaList.adapter = CalendarTasksListAdapter(
+                viewLifecycleOwner,
+                viewPresenter,
+                viewModel
+            )
+
+            // scroll calendar to current date, if -adjust- button was pushed
+            viewModel.monthStartDate.onEach { monthStartDate ->
+                when (calendarView.findFirstVisibleMonth()?.yearMonth?.atStartOfMonth()) {
+                    monthStartDate -> Unit // already at current month/year
+                    else -> calendarView.scrollToDate(LocalDate.now())
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
+    }
 
-        dayAgendaList.adapter = CalendarTasksListAdapter(
-            viewLifecycleOwner,
-            viewPresenter,
-            viewModel
-        )
-
-        // scroll calendar to current date, if -adjust- button was pushed
-        viewModel.monthStartDate.onEach { monthStartDate ->
-            when (calendarView.findFirstVisibleMonth()?.yearMonth?.atStartOfMonth()) {
-                monthStartDate -> Unit // already at current month/year
-                else -> calendarView.smoothScrollToDate(LocalDate.now())
-            }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-    }.root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     inner class CalendarPresenter {
 
@@ -138,9 +166,9 @@ class CalendarFragment : Fragment() {
             viewModel.setCalendarSelectedDate(date)
         }
 
-        fun onCalendarTaskDetails(plannerTaskInfo: PlannerTaskInfo) {
+        fun onCalendarTaskDetails(taskId: Long) {
             findNavController().navigate(
-                CalendarFragmentDirections.showTaskDetails(plannerTaskInfo = plannerTaskInfo)
+                CalendarFragmentDirections.showTaskDetails(taskId = taskId)
             )
         }
     }

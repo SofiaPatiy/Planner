@@ -114,12 +114,12 @@ fun bindIsNewTaskOkToSubmit(view: MaterialToolbar, isTaskOkToSubmit: Boolean?) =
 @BindingAdapter("adjustDate")
 fun bindAdjustCalendarDate(
     view: MaterialToolbar,
-    startMonthDate: LocalDate?
+    selectedDate: LocalDate?
 ) =
     view.apply {
-        startMonthDate ?: return@apply
+        selectedDate ?: return@apply
         val adjustItem = menu.findItem(R.id.adjustDate)
-        adjustItem.isEnabled = (startMonthDate != LocalDate.now().withDayOfMonth(1))
+        adjustItem.isEnabled = (selectedDate != LocalDate.now())
     }
 
 @BindingAdapter(
@@ -155,7 +155,7 @@ fun bindSelectedCalendarDate(
                             null -> setTintList(defaultTintList)
                             else -> setTintList(ColorStateList.valueOf(dailyUrgency.colorId))
                         }
-                        alpha = 64
+                        alpha = 128
                     }
 
                     else -> ResourcesCompat.getDrawable(
@@ -168,7 +168,7 @@ fun bindSelectedCalendarDate(
                             null -> setTintList(defaultTintList)
                             else -> setTintList(ColorStateList.valueOf(dailyUrgency.colorId))
                         }
-                        alpha = 64
+                        alpha = 128
                     }
                 }
             }

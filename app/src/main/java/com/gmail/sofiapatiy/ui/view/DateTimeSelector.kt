@@ -8,7 +8,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.adapters.ListenerUtil
 import com.gmail.sofiapatiy.R
 import com.gmail.sofiapatiy.databinding.ViewCustomDatetimeSelectorBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DateTimeSelector(context: Context, attrs: AttributeSet) :
     ConstraintLayout(context, attrs) {
 

@@ -2,7 +2,7 @@ package com.gmail.sofiapatiy
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
@@ -10,14 +10,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gmail.sofiapatiy.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("main_activity", "viewModel $viewModel")
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val navView: BottomNavigationView = binding.navView
@@ -26,7 +25,11 @@ class MainActivity : AppCompatActivity() {
         val onDestinationChangedListener =
             NavController.OnDestinationChangedListener { _, destination, _ ->
                 navView.isVisible = when (destination.id) {
-                    R.id.navigation_new_task, R.id.navigation_task_details -> false
+                    R.id.navigation_auth,
+                    R.id.navigation_signup,
+                    R.id.navigation_new_task,
+                    R.id.navigation_task_details -> false
+
                     else -> true
                 }
             }
@@ -39,10 +42,25 @@ class MainActivity : AppCompatActivity() {
         try {
             navController.removeOnDestinationChangedListener(onDestinationChangedListener)
         } catch (e: Exception) {
-            // ok, if no listener attached
+            Log.d("MainActivity", "destinationChangedListener failure: $e")
         } finally {
             navController.addOnDestinationChangedListener(onDestinationChangedListener)
         }
         navView.setupWithNavController(navController)
+
+        val callback = object : OnBackPressedCallback(true /* enabled by default */) {
+            override fun handleOnBackPressed() {
+                when (navController.currentDestination?.id) {
+                    R.id.navigation_auth,
+                    R.id.navigation_home,
+                    R.id.navigation_calendar,
+                    R.id.navigation_settings,
+                    R.id.navigation_about -> finish()
+
+                    else -> navController.navigateUp()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 }

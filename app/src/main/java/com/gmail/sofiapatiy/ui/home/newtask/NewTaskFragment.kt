@@ -3,6 +3,7 @@ package com.gmail.sofiapatiy.ui.home.newtask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
@@ -23,11 +24,13 @@ import com.gmail.sofiapatiy.ktx.showOnScreen
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
+@AndroidEntryPoint
 class NewTaskFragment : Fragment() {
 
     private val viewModel: NewTaskViewModel by viewModels()
@@ -45,42 +48,56 @@ class NewTaskFragment : Fragment() {
             }
         }
 
+    private var _binding: FragmentNewTaskBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentNewTaskBinding.inflate(layoutInflater).apply {
+        _binding = this
         lifecycleOwner = viewLifecycleOwner
         taskViewModel = viewModel
         presenter = viewPresenter
-
-        ViewCompat.setOnApplyWindowInsetsListener(actionBar) { appbar, insets ->
-            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-            if (statusBarHeight != 0)
-                appbar.updatePadding(top = statusBarHeight)
-            WindowInsetsCompat.CONSUMED
-        }
-
-        viewModel.operationStatus.filterNotNull().onEach {
-            when (it) {
-                is OperationStatus.Success -> viewPresenter.onNavigateBack()
-                is OperationStatus.Failure -> {
-                    Toast.makeText(requireActivity(), it.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        // take care of listener, to avoid memory leaks
-        val oldUrgencyListener = ListenerUtil.trackListener(
-            urgencyGroup,
-            urgencyListener,
-            R.id.urgencyListener
-        )
-        if (oldUrgencyListener != null) {
-            urgencyGroup.removeOnButtonCheckedListener(oldUrgencyListener)
-        }
-        urgencyGroup.addOnButtonCheckedListener(urgencyListener)
     }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            ViewCompat.setOnApplyWindowInsetsListener(actionBar) { appbar, insets ->
+                val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+                if (statusBarHeight != 0)
+                    appbar.updatePadding(top = statusBarHeight)
+                WindowInsetsCompat.CONSUMED
+            }
+
+            viewModel.operationStatus.filterNotNull().onEach {
+                when (it) {
+                    is OperationStatus.Success -> viewPresenter.onNavigateBack()
+                    is OperationStatus.Failure -> {
+                        Toast.makeText(requireActivity(), it.toString(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+            // take care of listener, to avoid memory leaks
+            val oldUrgencyListener = ListenerUtil.trackListener(
+                urgencyGroup,
+                urgencyListener,
+                R.id.urgencyListener
+            )
+            if (oldUrgencyListener != null) {
+                urgencyGroup.removeOnButtonCheckedListener(oldUrgencyListener)
+            }
+            urgencyGroup.addOnButtonCheckedListener(urgencyListener)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     inner class NewTaskPresenter {
 

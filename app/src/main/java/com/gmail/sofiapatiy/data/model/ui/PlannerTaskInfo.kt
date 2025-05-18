@@ -2,6 +2,7 @@ package com.gmail.sofiapatiy.data.model.ui
 
 import android.os.Parcelable
 import com.gmail.sofiapatiy.data.model.firebase.Urgency
+import com.gmail.sofiapatiy.ktx.asNormalizedDateTime
 import com.gmail.sofiapatiy.ktx.toUIDateTimeFormattedString
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -9,7 +10,9 @@ import java.time.LocalDateTime
 
 @Parcelize
 data class PlannerTaskInfo(
-    val firebaseKey: String? = null, // will be set later
+    val taskFirebaseKey: String? = null, // will be set later
+    val databaseTaskId: Long,
+    val userId: String,
     val name: String,
     val note: String,
     val reminder: LocalDateTime,
@@ -22,6 +25,12 @@ data class PlannerTaskInfo(
 
     @IgnoredOnParcel
     val formattedCreationDateTime = timeOfCreation.toUIDateTimeFormattedString()
+
+    @IgnoredOnParcel
+    val formattedDeadlineDateTime = timeOfDeadline.toUIDateTimeFormattedString()
+
+    @IgnoredOnParcel
+    val normalizedDeadlineDateTime = timeOfDeadline.asNormalizedDateTime()
 }
 
 fun Iterable<PlannerTaskInfo>.getDailyUrgency() =

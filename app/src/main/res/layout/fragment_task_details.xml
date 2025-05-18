@@ -31,7 +31,7 @@
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/menu_task_details"
                 app:navigationIcon="?attr/homeAsUpIndicator"
-                app:onMenuItemClick="@{ (m) -> presenter.onActionItemClicked(m)}"
+                app:onMenuItemClick="@{ (m) -> presenter.onActionItemClicked(m, taskViewModel.taskId)}"
                 app:onNavigationClick="@{(v) -> presenter.onNavigateBack()}"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:taskDetailsMenuState="@{taskViewModel.taskUiState}"

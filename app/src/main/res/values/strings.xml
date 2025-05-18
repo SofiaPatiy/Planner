@@ -24,4 +24,15 @@
     <string name="low">Low</string>
     <string name="medium">Medium</string>
     <string name="high">High</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="signup">Sign Up</string>
+    <string name="signup_new_user">Sign up new user</string>
+    <string name="username">Username</string>
+    <string name="new_user">New user</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="user_exists">User already exists</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="use_dark_theme">Use dark theme</string>
 </resources>

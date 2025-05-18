@@ -1,15 +1,14 @@
 package com.gmail.sofiapatiy.ui.home.newtask
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.sofiapatiy.AppConstants.Companion.DB_URL
-import com.gmail.sofiapatiy.AppConstants.Companion.TASKS_NODE
-import com.gmail.sofiapatiy.data.convertors.toPlannerTaskFirebase
 import com.gmail.sofiapatiy.data.model.firebase.Urgency
 import com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo
 import com.gmail.sofiapatiy.data.network.OperationStatus
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.Dispatchers
+import com.gmail.sofiapatiy.repository.PlannerRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,8 +19,18 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
-class NewTaskViewModel : ViewModel() {
+@HiltViewModel
+class NewTaskViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    @Named("Coroutine.Context.IO") private val coroutineContext: CoroutineContext,
+    private val repository: PlannerRepository
+) : ViewModel() {
+    private val _userId = savedStateHandle.get<String>("userId")
+
     private val _operationStatus = MutableStateFlow<OperationStatus?>(null)
     val operationStatus = _operationStatus.asStateFlow()
 
@@ -56,6 +65,8 @@ class NewTaskViewModel : ViewModel() {
         taskDescription.filterNotNull()
     ) { completion, deadline, reminder, name, description ->
         return@combine PlannerTaskInfo(
+            databaseTaskId = 0L,
+            userId = _userId ?: "",
             name = name,
             note = description,
             timeOfCreation = LocalDateTime.now(),
@@ -80,18 +91,22 @@ class NewTaskViewModel : ViewModel() {
     }
 
     fun submitNewTask() {
-        viewModelScope.launch(Dispatchers.IO) {
-            plannerTaskInfo.firstOrNull()?.let {
-                val firebaseDatabase = FirebaseDatabase.getInstance(DB_URL)
-                val databaseReference = firebaseDatabase.getReference(TASKS_NODE)
+        viewModelScope.launch(coroutineContext) {
+            runCatching {
+                plannerTaskInfo.firstOrNull()?.let { newTask ->
+                    repository.submitNewTask(
+                        task = newTask,
+                        onSuccessListener = {
+                            _operationStatus.update { OperationStatus.Success }
+                        },
+                        onFailureListener = { e ->
+                            _operationStatus.update { OperationStatus.Failure(e) }
+                        }
 
-                databaseReference.push().setValue(it.toPlannerTaskFirebase())
-                    .addOnSuccessListener {
-                        _operationStatus.update { OperationStatus.Success }
-                    }
-                    .addOnFailureListener { e ->
-                        _operationStatus.update { OperationStatus.Failure(e) }
-                    }
+                    )
+                }
+            }.onFailure {
+                Log.e("submit_new_task", "$it")
             }
         }
     }

@@ -1,16 +1,15 @@
 package com.gmail.sofiapatiy.ui.home.taskdetails
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.sofiapatiy.AppConstants.Companion.DB_URL
-import com.gmail.sofiapatiy.AppConstants.Companion.TASKS_NODE
-import com.gmail.sofiapatiy.data.convertors.toPlannerTaskFirebase
 import com.gmail.sofiapatiy.data.model.firebase.Urgency
 import com.gmail.sofiapatiy.data.model.ui.PlannerTaskInfo
 import com.gmail.sofiapatiy.data.model.ui.TaskUiState
 import com.gmail.sofiapatiy.data.network.OperationStatus
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.Dispatchers
+import com.gmail.sofiapatiy.repository.PlannerRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,9 +23,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
-class TaskDetailsViewModel : ViewModel() {
-    private val _task = MutableStateFlow<PlannerTaskInfo?>(null)
+@HiltViewModel
+class TaskDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    @Named("Coroutine.Context.IO") private val coroutineContext: CoroutineContext,
+    private val repository: PlannerRepository
+) : ViewModel() {
+
+    private val _taskId = savedStateHandle.get<Long>("taskId")
+    val taskId = MutableStateFlow(_taskId)
+
+    private val _task = repository.getTaskById(_taskId ?: -1L)
 
     private val _taskUiState = MutableStateFlow<TaskUiState>(TaskUiState.View)
     val taskUiState = _taskUiState.asStateFlow()
@@ -69,6 +80,8 @@ class TaskDetailsViewModel : ViewModel() {
         taskDescription.filterNotNull()
     ) { completion, deadline, reminder, name, description ->
         return@combine PlannerTaskInfo(
+            databaseTaskId = 0,
+            userId = "",
             name = name,
             note = description,
             timeOfCreation = LocalDateTime.now(),
@@ -88,7 +101,8 @@ class TaskDetailsViewModel : ViewModel() {
         )
     }.combine(_task) { taskInfo, originalTaskInfo ->
         taskInfo.copy(
-            firebaseKey = originalTaskInfo?.firebaseKey
+            userId = originalTaskInfo?.userId ?: "",
+            taskFirebaseKey = originalTaskInfo?.taskFirebaseKey
         )
     }
 
@@ -100,26 +114,44 @@ class TaskDetailsViewModel : ViewModel() {
         _taskUiState.update { state }
     }
 
-    fun setTask(task: PlannerTaskInfo) {
-        _task.update { task }
-    }
-
-    fun submitTask() {
-        viewModelScope.launch(Dispatchers.IO) {
-            plannerTaskInfo.firstOrNull()?.let { task ->
-                val firebaseDatabase = FirebaseDatabase.getInstance(DB_URL)
-                val databaseReference = firebaseDatabase.reference
-
-                task.firebaseKey?.let { key ->
-                    databaseReference.child(TASKS_NODE).child(key)
-                        .setValue(task.toPlannerTaskFirebase())
-                        .addOnSuccessListener {
+    fun updateTask() {
+        viewModelScope.launch(coroutineContext) {
+            runCatching {
+                plannerTaskInfo.firstOrNull()?.let { task ->
+                    repository.updateTask(
+                        task = task,
+                        onSuccessListener = {
                             _operationStatus.update { OperationStatus.Success }
-                        }
-                        .addOnFailureListener { e ->
+                        },
+                        onFailureListener = { e ->
                             _operationStatus.update { OperationStatus.Failure(e) }
                         }
+
+                    )
                 }
+            }.onFailure {
+                Log.e("update_task", "$it")
+            }
+        }
+    }
+
+    fun deleteTask() {
+        viewModelScope.launch(coroutineContext) {
+            runCatching {
+                _task.firstOrNull()?.let { task ->
+                    repository.deleteTask(
+                        task = task,
+                        onSuccessListener = {
+                            _operationStatus.update { OperationStatus.Success }
+                        },
+                        onFailureListener = { e ->
+                            _operationStatus.update { OperationStatus.Failure(e) }
+                        }
+
+                    )
+                }
+            }.onFailure {
+                Log.e("delete_task", "$it")
             }
         }
     }
