@@ -58,6 +58,7 @@
                 android:id="@+id/taskNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@{item.note}"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
@@ -67,14 +68,32 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/taskCreationDateTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{item.formattedCreationDateTime}"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
+                app:creationDateTime="@{item}"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/taskNote"
-                tools:text="ABC 11.22.3333 44:55" />
+                tools:text="Created: 11.22.3333 44:55" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskDeadlineDateTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                app:deadlineDateTime="@{item}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/taskCreationDateTime"
+                tools:text="Deadline: 11.22.3333 44:55" />
 
             <ImageView
                 android:layout_width="wrap_content"

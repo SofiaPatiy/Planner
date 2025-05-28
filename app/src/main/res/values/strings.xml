@@ -35,4 +35,6 @@
     <string name="user_exists">User already exists</string>
     <string name="confirm_password">Confirm password</string>
     <string name="use_dark_theme">Use dark theme</string>
+    <string name="created">Created:</string>
+    <string name="deadline">Deadline:</string>
 </resources>

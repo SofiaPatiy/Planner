@@ -272,3 +272,17 @@ fun bindUrgencyIndicator(view: ImageView, urgency: Urgency?) =
         urgency ?: return@apply
         DrawableCompat.setTint(this.drawable, urgency.colorId)
     }
+
+@BindingAdapter("creationDateTime")
+fun bindCreationDateTime(view: TextView, info: PlannerTaskInfo?) =
+    view.apply {
+        info ?: return@apply
+        text = "${resources.getString(R.string.created)} ${info.formattedCreationDateTime}"
+    }
+
+@BindingAdapter("deadlineDateTime")
+fun bindDeadlineDateTime(view: TextView, info: PlannerTaskInfo?) =
+    view.apply {
+        info ?: return@apply
+        text = "${resources.getString(R.string.deadline)} ${info.formattedDeadlineDateTime}"
+    }

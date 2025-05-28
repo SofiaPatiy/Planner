@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class AppData {
+object AppData {
 
     @Singleton
     @Provides
