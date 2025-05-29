@@ -35,6 +35,8 @@ class CalendarViewModel @Inject constructor(
     ) { tasks, date ->
         tasks.filter { plannerTaskInfo ->
             plannerTaskInfo.timeOfDeadline.toLocalDate() == date
+        }.sortedBy {
+            it.urgency.sortPriority
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 

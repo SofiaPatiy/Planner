@@ -7,7 +7,7 @@ import com.gmail.sofiapatiy.AppConstants.Companion.LOW_URGENCY
 import com.gmail.sofiapatiy.AppConstants.Companion.MEDIUM_URGENCY
 import kotlinx.parcelize.Parcelize
 
-sealed class Urgency(val level: String, val colorId: Int) : Parcelable {
+sealed class Urgency(val level: String, val colorId: Int, val sortPriority:Int) : Parcelable {
 
     companion object {
         fun getUrgencyByLevel(level: String): Urgency? {
@@ -21,11 +21,11 @@ sealed class Urgency(val level: String, val colorId: Int) : Parcelable {
     }
 
     @Parcelize
-    data object Low : Urgency(LOW_URGENCY, Color.GREEN)
+    data object Low : Urgency(LOW_URGENCY, Color.GREEN, 2)
 
     @Parcelize
-    data object Medium : Urgency(MEDIUM_URGENCY, Color.YELLOW)
+    data object Medium : Urgency(MEDIUM_URGENCY, Color.YELLOW, 1)
 
     @Parcelize
-    data object High : Urgency(HIGH_URGENCY, Color.RED)
+    data object High : Urgency(HIGH_URGENCY, Color.RED, 0)
 }

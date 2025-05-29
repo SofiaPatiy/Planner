@@ -16,6 +16,7 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,6 +37,11 @@ class HomeViewModel @Inject constructor(
     private val databaseReference = firebaseDatabase.getReference(TASKS_NODE)
 
     val tasks = repository.getAllTasks()
+        .map {list->
+            list.sortedBy {
+                it.urgency.sortPriority
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val firebaseEventListener = object : ValueEventListener {

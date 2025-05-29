@@ -51,13 +51,13 @@ class CalendarForegroundService : Service() {
 
                     // find first "deadlined" task for current timeTick
                     userTasks.firstOrNull { task ->
-                        task.normalizedDeadlineDateTime == timeTick
+                        task.normalizedReminderDateTime == timeTick
                     }?.let { deadlinedTask ->
 
                         // inform, if any
                         sendLocalNotification(
-                            "deadline for: ${deadlinedTask.name}",
-                            deadlinedTask.formattedDeadlineDateTime
+                            "reminder for: ${deadlinedTask.name}",
+                            deadlinedTask.formattedReminderDateTime
                         )
                     }
                 }

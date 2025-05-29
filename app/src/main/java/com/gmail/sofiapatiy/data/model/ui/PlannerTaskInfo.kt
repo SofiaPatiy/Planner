@@ -30,7 +30,10 @@ data class PlannerTaskInfo(
     val formattedDeadlineDateTime = timeOfDeadline.toUIDateTimeFormattedString()
 
     @IgnoredOnParcel
-    val normalizedDeadlineDateTime = timeOfDeadline.asNormalizedDateTime()
+    val formattedReminderDateTime = reminder.toUIDateTimeFormattedString()
+
+    @IgnoredOnParcel
+    val normalizedReminderDateTime = reminder.asNormalizedDateTime()
 }
 
 fun Iterable<PlannerTaskInfo>.getDailyUrgency() =
