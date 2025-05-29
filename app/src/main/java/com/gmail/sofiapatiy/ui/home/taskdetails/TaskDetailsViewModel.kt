@@ -67,7 +67,6 @@ class TaskDetailsViewModel @Inject constructor(
     ) { name, description ->
         return@combine when {
             name.isNullOrBlank() or name.isNullOrEmpty() -> false
-            description.isNullOrBlank() or description.isNullOrEmpty() -> false
             else -> true
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
@@ -77,13 +76,13 @@ class TaskDetailsViewModel @Inject constructor(
         deadlineDateTime,
         reminderDateTime,
         taskName.filterNotNull(),
-        taskDescription.filterNotNull()
+        taskDescription
     ) { completion, deadline, reminder, name, description ->
         return@combine PlannerTaskInfo(
             databaseTaskId = 0,
             userId = "",
             name = name,
-            note = description,
+            note = description ?: "",
             timeOfCreation = LocalDateTime.now(),
             timeOfCompletion = completion,
             timeOfDeadline = deadline,

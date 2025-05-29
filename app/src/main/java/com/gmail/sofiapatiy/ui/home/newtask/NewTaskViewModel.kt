@@ -52,7 +52,6 @@ class NewTaskViewModel @Inject constructor(
     ) { name, description ->
         return@combine when {
             name.isNullOrBlank() or name.isNullOrEmpty() -> false
-            description.isNullOrBlank() or description.isNullOrEmpty() -> false
             else -> true
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
