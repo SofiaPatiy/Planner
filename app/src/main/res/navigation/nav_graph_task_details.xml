@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_task_details"
+    app:startDestination="@id/navigation_task_details">
+
+    <fragment
+        android:id="@+id/navigation_task_details"
+        android:name="com.gmail.sofiapatiy.ui.home.taskdetails.TaskDetailsFragment"
+        tools:layout="@layout/fragment_task_details">
+
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/showConfirmationDeleteDialog"
+            app:destination="@id/confirmationDeleteDialog"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/confirmationDeleteDialog"
+        android:name="com.gmail.sofiapatiy.ui.home.taskdetails.dialog.ConfirmDeleteDialogFragment">
+
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </dialog>
+
+    <action
+        android:id="@+id/showConfirmationDeleteDialog"
+        app:destination="@id/confirmationDeleteDialog"
+        app:launchSingleTop="true" />
+</navigation>

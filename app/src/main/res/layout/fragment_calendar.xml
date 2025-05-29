@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="calendarViewModel"
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarViewModel" />
+
+        <variable
+            name="calendarPresenter"
+            type="com.gmail.sofiapatiy.ui.calendar.CalendarFragment.CalendarPresenter" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/actionBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:adjustDate="@{calendarViewModel.selectedDate}"
+                app:menu="@menu/menu_calendar"
+                app:monthStartDate="@{calendarViewModel.monthStartDate}"
+                app:onMenuItemClick="@{ (m) -> calendarPresenter.onActionItemClicked(m)}"
+                tools:title="@string/calendar" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".ui.calendar.CalendarFragment">
+
+            <com.kizitonwose.calendar.view.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cv_dayViewResource="@layout/view_calendar_day"
+                app:cv_monthHeaderResource="@layout/view_calendar_titles_container"
+                app:cv_orientation="horizontal"
+                app:cv_outDateStyle="endOfGrid"
+                app:cv_scrollPaged="true"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_height="200dp" />
+
+            <View
+                android:id="@+id/calendarDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="?attr/colorTertiary"
+                app:layout_constraintTop_toBottomOf="@id/calendarView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dayAgendaList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:firebaseCalendarTasks="@{calendarViewModel.dailyTasks}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/calendarDivider" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:src="@drawable/tasks_app_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="@id/dayAgendaList"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dayAgendaList"
+                app:tint="?attr/colorTertiary"
+                app:visibleGone="@{calendarViewModel.isDailyTasksEmpty()}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
