@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -28,6 +29,7 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     private val databaseReference = firebaseDatabase.getReference(USERS_NODE)
 
     private val _users = MutableStateFlow<Map<String, PlannerUserFirebase>?>(null)
+    val users = _users.asStateFlow()
 
     private val firebaseEventListener = object : ValueEventListener {
 
@@ -64,8 +66,8 @@ class AuthViewModel @Inject constructor() : ViewModel() {
         val encodedPassword = enteredPassword.asBase64Encoded().trim()
 
         return@combine users.entries.firstOrNull { firebaseUser ->
-            firebaseUser.value.username == enteredLogin.trim() &&
-                    firebaseUser.value.password == encodedPassword
+            firebaseUser.value.username == enteredLogin &&
+                    firebaseUser.value.password.trim() == encodedPassword.trim() // remove possible whitespaces
         }?.key // firebase user key serve as auth parameter
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
